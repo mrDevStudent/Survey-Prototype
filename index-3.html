@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Research Survey</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F6F4EE;
+    --paper-2:#EFECE3;
+    --ink:#232722;
+    --ink-soft:#5B6158;
+    --teal:#1F5F5B;
+    --teal-dark:#163F3D;
+    --amber:#C0842E;
+    --line:#D9D4C4;
+    --error:#A8483A;
+    --good:#2F6B3A;
+    --card-shadow: 0 1px 0 rgba(35,39,34,0.04);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    min-height:100vh;
+  }
+  .app{
+    max-width:760px;
+    margin:0 auto;
+    padding:56px 32px 96px;
+    position:relative;
+    transition:max-width 0.15s ease;
+  }
+  .app.app-wide{
+    max-width:1080px;
+  }
+  @media (max-width:640px){
+    .app{ padding:24px 16px 64px; }
+  }
+  @media (max-width:380px){
+    .app{ padding:20px 12px 56px; }
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.12em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:clamp(26px,5vw,38px);
+    line-height:1.15;
+    margin:0 0 14px;
+    letter-spacing:-0.01em;
+  }
+  h2{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:21px;
+    margin:0 0 4px;
+  }
+  h3{
+    font-family:'Fraunces',serif;
+    font-weight:500;
+    font-size:17px;
+    margin:0 0 6px;
+  }
+  p.lede{
+    color:var(--ink-soft);
+    font-size:15.5px;
+    line-height:1.6;
+    max-width:60ch;
+  }
+  .card{
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:2px;
+    box-shadow:var(--card-shadow);
+    padding:32px;
+    margin-top:24px;
+  }
+  @media (max-width:640px){
+    .card{ padding:20px 16px; margin-top:18px; }
+  }
+  .hr{
+    border:none;
+    border-top:1px solid var(--line);
+    margin:20px 0;
+  }
+  .btn{
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    padding:13px 26px;
+    border-radius:2px;
+    border:1px solid var(--teal-dark);
+    background:var(--teal-dark);
+    color:#fff;
+    cursor:pointer;
+    transition:transform .12s ease, background .12s ease;
+  }
+  .btn:hover{background:var(--teal);}
+  .btn:active{transform:scale(0.98);}
+  .btn.secondary{
+    background:transparent;
+    color:var(--ink);
+    border:1px solid var(--line);
+  }
+  .btn.secondary:hover{border-color:var(--ink-soft);}
+  .btn.danger{
+    background:transparent;
+    color:var(--error);
+    border:1px solid var(--error);
+  }
+  .btn-disabled{
+    opacity:.4;
+    cursor:not-allowed;
+  }
+  .btn-disabled:hover{ background:var(--teal-dark); }
+  .hub-progress{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:10px;
+    text-align:right;
+  }
+  .btn-row{
+    display:flex;
+    justify-content:space-between;
+    margin-top:32px;
+    gap:12px;
+  }
+  .btn-row.end{justify-content:flex-end;}
+  @media (max-width:560px){
+    .btn-row{ flex-direction:column-reverse; }
+    .btn-row.end{ flex-direction:row; }
+    .btn-row > div{ display:flex; gap:12px; width:100%; }
+    .btn-row > div .btn{ flex:1; }
+    .btn{ width:100%; text-align:center; padding:14px 20px; }
+    .btn-row.end .btn{ width:auto; }
+  }
+  label{
+    display:block;
+    font-size:13.5px;
+    font-weight:600;
+    margin-bottom:6px;
+    color:var(--ink);
+  }
+  label .opt{
+    font-weight:400;
+    color:var(--ink-soft);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+  }
+  input[type=text],input[type=number],input[type=email],select{
+    width:100%;
+    padding:11px 12px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    font-family:'Inter',sans-serif;
+    font-size:14.5px;
+    background:var(--paper);
+    color:var(--ink);
+  }
+  input:focus,select:focus,button:focus-visible{
+    outline:2px solid var(--teal);
+    outline-offset:1px;
+  }
+  .field{margin-bottom:18px;}
+  .grid-2{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media (max-width:560px){ .grid-2{grid-template-columns:1fr;} }
+
+  .cat-pick-row{
+    display:flex; align-items:flex-start; gap:14px;
+    padding:16px 4px; border-bottom:1px solid var(--line); cursor:pointer;
+  }
+  .cat-pick-row:last-of-type{border-bottom:none;}
+  .cat-status-icon{
+    font-size:20px; line-height:1.4; flex-shrink:0; width:22px; text-align:center;
+  }
+  .cat-status-icon.complete{ color:var(--good); }
+  .cat-status-icon.pending{ color:var(--line); }
+  .cat-pick-body{ flex:1; min-width:0; }
+  .cat-pick-row .pill{ flex-shrink:0; align-self:flex-start; }
+  @media (max-width:480px){
+    .cat-pick-row{ flex-wrap:wrap; }
+    .cat-pick-row .pill{ margin-left:36px; margin-top:6px; }
+  }
+  .cat-code{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    color:var(--amber); letter-spacing:0.06em;
+  }
+  .cat-title{ display:block; font-family:'Fraunces',serif; font-size:17px; margin-top:2px; }
+  .cat-sub{ display:block; color:var(--ink-soft); font-size:13.5px; margin-top:2px; }
+
+  .q-block{
+    padding:22px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .q-block:last-child{border-bottom:none;}
+  .q-code{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--amber);
+    letter-spacing:0.06em;
+    margin-bottom:8px;
+    display:block;
+  }
+  .q-scenario{
+    font-size:15px;
+    line-height:1.55;
+    margin-bottom:8px;
+  }
+  .q-prompt{
+    font-size:13.5px;
+    font-weight:600;
+    color:var(--teal-dark);
+    margin-bottom:12px;
+  }
+  .opt-row{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:12px 14px;
+    border:1px solid var(--line);
+    border-radius:2px;
+    margin-bottom:8px;
+    cursor:pointer;
+    transition:all .12s ease;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .opt-row:hover{border-color:var(--ink-soft);}
+  .opt-row input{margin-top:4px; flex-shrink:0;}
+  .opt-row.checked{
+    border-color:var(--teal-dark);
+    background:#F4F8F6;
+  }
+  .opt-letter{
+    font-family:'IBM Plex Mono',monospace;
+    font-weight:600;
+    color:var(--teal-dark);
+    flex-shrink:0;
+  }
+  .error-msg{
+    color:var(--error);
+    font-size:13px;
+    margin-top:8px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .consent-box{
+    background:var(--paper);
+    border:1px solid var(--line);
+    padding:20px;
+    max-height:260px;
+    overflow-y:auto;
+    font-size:14px;
+    line-height:1.7;
+    color:var(--ink-soft);
+    margin:20px 0;
+  }
+  .consent-box strong{color:var(--ink);}
+  .check-row{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    margin-top:16px;
+  }
+  .check-row input{margin-top:3px;}
+  .check-row label{font-weight:500;font-size:14px;margin:0;}
+  .review-cat{ margin-bottom:14px; }
+  .review-cat h3{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin:0 0 4px;
+  }
+  .review-cat p{margin:0;color:var(--ink-soft);font-size:13.5px;}
+  .stamp{
+    display:inline-block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    color:var(--teal-dark);
+    border:1px solid var(--teal-dark);
+    padding:4px 10px;
+    border-radius:2px;
+    margin-bottom:16px;
+  }
+  .score-panel{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin:20px 0;
+  }
+  @media (max-width:560px){ .score-panel{grid-template-columns:1fr;} }
+  .score-card{
+    border:1px solid var(--line);
+    padding:20px;
+    text-align:center;
+  }
+  .score-card .label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .score-card .value{
+    font-family:'Fraunces',serif;
+    font-size:40px;
+    font-weight:600;
+    color:var(--teal-dark);
+    margin:8px 0 2px;
+  }
+  .score-card .sub{
+    font-size:12.5px;
+    color:var(--ink-soft);
+  }
+  .delta-good{color:var(--good); font-weight:600;}
+  .delta-bad{color:var(--error); font-weight:600;}
+  table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:13px;
+    font-family:'IBM Plex Mono',monospace;
+  }
+  th,td{
+    text-align:left;
+    padding:8px 10px;
+    border-bottom:1px solid var(--line);
+    white-space:nowrap;
+  }
+  th{
+    color:var(--ink-soft);
+    font-weight:500;
+    text-transform:uppercase;
+    font-size:10.5px;
+    letter-spacing:0.06em;
+  }
+  .table-wrap{
+    overflow-x:auto;
+    border:1px solid var(--line);
+    margin-top:20px;
+  }
+  .top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .card-narrow{ max-width:360px; margin-left:auto; margin-right:auto; }
+  .pill{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    background:var(--paper-2);
+    padding:4px 10px;
+    border-radius:20px;
+    color:var(--ink-soft);
+  }
+  a.quiet{color:var(--teal-dark);font-size:13px;}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc, setDoc
+  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAE6qiggxn3lnUFYPOCY2sSl4mbyHswvRA",
+    authDomain: "student-survey-db.firebaseapp.com",
+    projectId: "student-survey-db",
+    storageBucket: "student-survey-db.firebasestorage.app",
+    messagingSenderId: "661164339094",
+    appId: "1:661164339094:web:a797cf05581ba6af2837b7"
+  };
+
+  const fbApp = initializeApp(firebaseConfig);
+  const db = getFirestore(fbApp);
+  const RESPONSES_COL = 'responses';
+  const BACKUP_COL = 'responses_backup';
+
+  // Exposed on window so the classic <script> below (which uses plain
+  // top-level functions + inline onclick=) can call into Firestore.
+  window.__fb = {
+    async addResponse(entry){
+      const ref = await addDoc(collection(db, RESPONSES_COL), entry);
+      return ref.id;
+    },
+    async getResponses(){
+      const snap = await getDocs(collection(db, RESPONSES_COL));
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+    async getArchived(){
+      const snap = await getDocs(collection(db, BACKUP_COL));
+      return snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    },
+    // Soft-delete: copies each doc into responses_backup (same doc id,
+    // plus an archivedAt timestamp) then removes it from responses.
+    // Nothing is ever permanently destroyed from the admin UI.
+    async archiveResponses(ids){
+      for (const id of ids){
+        const srcRef = doc(db, RESPONSES_COL, id);
+        const snap = await getDoc(srcRef);
+        if (snap.exists()){
+          await setDoc(doc(db, BACKUP_COL, id), { ...snap.data(), archivedAt: new Date().toISOString() });
+          await deleteDoc(srcRef);
+        }
+      }
+    },
+    // Reverses archiveResponses: copies the doc back into responses
+    // (dropping the archivedAt marker) and removes it from the backup.
+    async restoreResponses(ids){
+      for (const id of ids){
+        const srcRef = doc(db, BACKUP_COL, id);
+        const snap = await getDoc(srcRef);
+        if (snap.exists()){
+          const data = snap.data();
+          delete data.archivedAt;
+          await setDoc(doc(db, RESPONSES_COL, id), data);
+          await deleteDoc(srcRef);
+        }
+      }
+    }
+  };
+</script>
+
+<script>
+const QUESTION_BANK = [{"section": "pre", "category": "academic", "num": 1, "scenario": "During the middle of the semester, one of your classmates who has always been active in class suddenly begins missing quizzes and submitting incomplete requirements. When you ask if everything is okay, the student replies, \"I'm just overwhelmed. I'll figure it out eventually.\" The student does not elaborate further.", "question": "What would be the MOST appropriate response?", "options": {"A": "Encourage the student to speak with the course instructor first to discuss possible academic accommodations while reminding them that support is available if needed.", "B": "Spend more time listening to understand what may be contributing to the student's difficulties and encourage seeking appropriate school support if concerns extend beyond academics.", "C": "Suggest reducing extracurricular commitments first and monitoring whether academic performance improves over the next few weeks.", "D": "Recommend focusing only on immediate deadlines before deciding whether additional assistance is necessary."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 35}}, {"section": "pre", "category": "academic", "num": 2, "scenario": "A classmate who is usually confident tells you after class, \"I studied really hard, but I still failed two major exams. Maybe I'm simply not capable of finishing this program.\"", "question": "What would be the BEST response?", "options": {"A": "Encourage the student to discuss study strategies with the instructor while exploring other factors that may be affecting academic performance.", "B": "Reassure the student that many people experience setbacks and encourage them to continue trying before making major decisions.", "C": "Help the student reflect on possible challenges affecting both academic performance and well-being, then discuss available campus support services if appropriate.", "D": "Recommend taking fewer subjects next semester to lessen academic pressure."}, "answer": "C", "scores": {"A": 80, "B": 30, "C": 100, "D": 35}}, {"section": "pre", "category": "academic", "num": 3, "scenario": "A student consistently arrives late because of responsibilities at home. Recently, the student admitted feeling guilty for falling behind in class but insists on managing the situation alone.", "question": "What would be the MOST appropriate response?", "options": {"A": "Respect the student's preference while reminding them that help is available if circumstances become more difficult.", "B": "Encourage the student to communicate with instructors regarding attendance concerns while discussing available support resources.", "C": "Explore how the student's responsibilities are affecting academic functioning before considering whether referral to appropriate support services may be beneficial.", "D": "Suggest creating a weekly schedule first before seeking additional assistance."}, "answer": "C", "scores": {"A": 25, "B": 80, "C": 100, "D": 45}}, {"section": "pre", "category": "academic", "num": 4, "scenario": "While working on a research project, your group member becomes unusually withdrawn and contributes very little. When asked privately, the student says, \"I don't think I can keep up anymore.\"", "question": "What would be the BEST response?", "options": {"A": "Encourage the student to discuss workload expectations with the research adviser while offering support as a teammate.", "B": "Ask open-ended questions to better understand what the student is experiencing and discuss appropriate campus resources if needed.", "C": "Suggest dividing group responsibilities differently to reduce immediate stress.", "D": "Recommend taking a short break from extracurricular activities until the project is completed."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 35}}, {"section": "pre", "category": "academic", "num": 5, "scenario": "A student says financial difficulties have made it difficult to purchase learning materials and attend some classes. The student worries about failing but does not want others to know about the situation.", "question": "What would be the MOST appropriate response?", "options": {"A": "Encourage the student to inquire about financial assistance programs while respecting confidentiality.", "B": "Explore the student's current concerns more thoroughly and discuss both academic and student support services that may be helpful.", "C": "Suggest borrowing notes and materials from classmates until finances improve.", "D": "Recommend speaking with instructors individually regarding missed requirements before considering additional services."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 35}}, {"section": "pre", "category": "emotional", "num": 6, "scenario": "A third-year Psychology student notices that a classmate who was once cheerful has become withdrawn over the past month. During lunch, the classmate quietly says, \u201cI don't know why, but I've been feeling sad almost every day. Even the things I used to enjoy don't make me happy anymore.\u201d", "question": "What is the MOST appropriate initial response?", "options": {"A": "Encourage the student to share more about how long these feelings have been affecting daily life.", "B": "Suggest taking a short break from academic responsibilities to regain emotional balance.", "C": "Recommend talking with a trusted faculty member about current personal concerns.", "D": "Encourage reconnecting with supportive friends while monitoring emotional changes."}, "answer": "A", "scores": {"A": 100, "B": 45, "C": 35, "D": 80}}, {"section": "pre", "category": "emotional", "num": 7, "scenario": "A classmate admits feeling extremely nervous before every class presentation. The student says the worry begins several days before the activity and often makes it difficult to concentrate.", "question": "What is the MOST appropriate initial response?", "options": {"A": "Discuss situations that usually trigger the student's anxious thoughts and reactions.", "B": "Encourage practicing simple relaxation techniques before academic activities begin.", "C": "Explore how anxiety affects school performance and everyday functioning.", "D": "Suggest seeking support from a trusted person within the school community."}, "answer": "C", "scores": {"A": 55, "B": 80, "C": 100, "D": 45}}, {"section": "pre", "category": "emotional", "num": 8, "scenario": "During a classroom reporting activity, a student suddenly leaves the room breathing rapidly and shaking. After calming down, the student explains that similar episodes have happened several times during stressful situations.", "question": "What is the MOST appropriate initial response?", "options": {"A": "Invite the student to describe the experience once they feel comfortable talking.", "B": "Explore whether similar situations have occurred in other academic settings.", "C": "Discuss available campus resources that may provide additional support.", "D": "Encourage informing the course instructor about the recent classroom incident."}, "answer": "B", "scores": {"A": 85, "B": 100, "C": 55, "D": 80}}, {"section": "pre", "category": "emotional", "num": 9, "scenario": "A student balancing academics, part-time work, and family responsibilities says, \u201cI feel exhausted every day. Even after sleeping, I still feel emotionally drained and unmotivated.\u201d", "question": "What is the MOST appropriate initial response?", "options": {"A": "Explore how current responsibilities are affecting emotional and academic functioning.", "B": "Encourage reviewing daily routines to identify possible sources of ongoing stress.", "C": "Discuss healthy coping strategies that may improve emotional well-being over time.", "D": "Recommend considering available student support resources if needed."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 35}}, {"section": "pre", "category": "emotional", "num": 10, "scenario": "After receiving several failing grades, a student quietly says, \u201cI don't think anything I do will ever make a difference anymore.\u201d", "question": "What is the MOST appropriate initial response?", "options": {"A": "Encourage the student to explain what has been happening in recent weeks.", "B": "Explore the intensity of these thoughts and determine whether immediate support is needed.", "C": "Discuss appropriate campus resources that may help address current concerns.", "D": "Suggest speaking with a trusted family member or supportive adult about the situation."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 55, "D": 45}}, {"section": "pre", "category": "social", "num": 11, "scenario": "A second-year student approaches you after class and says that several classmates often make jokes about their appearance during lectures. Although everyone laughs, the student says the comments have become embarrassing and they no longer want to participate in class discussions.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to describe when the incidents usually happen.", "B": "Suggest discussing the concern calmly with the classmates involved.", "C": "Explore how the experiences have affected school participation and well-being.", "D": "Recommend speaking with a trusted faculty member about the situation."}, "answer": "C", "scores": {"A": 80, "B": 45, "C": 100, "D": 35}}, {"section": "pre", "category": "social", "num": 12, "scenario": "A student shares screenshots of anonymous social media posts criticizing their personality and academic performance. The student says the posts have continued for several weeks and now avoids checking social media because of the comments.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to keep copies of the online messages received.", "B": "Explore how the online experiences affect daily functioning and emotions.", "C": "Discuss available school resources that may provide additional support.", "D": "Suggest limiting online interactions while considering appropriate next steps."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 55, "D": 45}}, {"section": "pre", "category": "social", "num": 13, "scenario": "Two close friends in your class have stopped speaking after a misunderstanding during a class activity. One of them tells you that the tension has become stressful and now affects concentration during lectures.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to reflect before discussing the misunderstanding calmly.", "B": "Explore how the conflict has affected academic and personal functioning.", "C": "Suggest identifying respectful ways to communicate with the other student.", "D": "Discuss possible support services if the situation continues affecting school life."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 55}}, {"section": "pre", "category": "social", "num": 14, "scenario": "During your research project, one group member suddenly stops attending meetings. Other members believe the student is simply avoiding responsibilities, but the student later shares that they feel ignored whenever they try to contribute ideas.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to describe previous experiences during group meetings.", "B": "Explore how the group interactions have influenced confidence and participation.", "C": "Suggest arranging another meeting where everyone can share their perspectives.", "D": "Discuss available support resources if communication problems continue."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 55}}, {"section": "pre", "category": "social", "num": 15, "scenario": "A newly transferred student rarely joins conversations and usually spends breaks alone. When approached, the student says, \"I want to make friends, but I never know what to say.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to share previous experiences in making friendships.", "B": "Explore situations where communicating with others feels most difficult.", "C": "Suggest participating in small group activities with familiar classmates.", "D": "Discuss available campus programs that encourage student involvement."}, "answer": "B", "scores": {"A": 80, "B": 100, "C": 45, "D": 55}}, {"section": "pre", "category": "family", "num": 16, "scenario": "A classmate who usually participates actively has become quiet and frequently misses deadlines. During a conversation, the student shares that their parents recently decided to separate. The student says, \"I don't know how to focus anymore because everything at home feels uncertain.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to describe how the situation has affected daily routines.", "B": "Discuss practical ways to balance academic tasks during this difficult period.", "C": "Suggest speaking with trusted family members about current emotional concerns.", "D": "Recommend exploring available school support services for additional guidance."}, "answer": "A", "scores": {"A": 100, "B": 55, "C": 45, "D": 35}}, {"section": "pre", "category": "family", "num": 17, "scenario": "A student returns to class one week after the death of a grandparent who raised them. Although attending classes again, the student admits feeling distracted and says, \"I still can't believe everything happened so fast.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to share how the loss has affected everyday functioning.", "B": "Discuss healthy ways of coping while adjusting to recent life changes.", "C": "Suggest informing instructors about temporary academic difficulties being experienced.", "D": "Recommend considering available campus support resources during the adjustment."}, "answer": "A", "scores": {"A": 100, "B": 55, "C": 45, "D": 35}}, {"section": "pre", "category": "family", "num": 18, "scenario": "A student working evening shifts has recently arrived late to several classes. The student explains, \"I need the job to help support my family, but I feel exhausted trying to keep up with everything.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how work responsibilities are affecting academic and personal functioning.", "B": "Encourage reviewing current schedules to identify manageable daily adjustments.", "C": "Discuss possible campus resources that may support the student's situation.", "D": "Suggest communicating with instructors regarding current academic challenges."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "pre", "category": "family", "num": 19, "scenario": "A student shares that a parent has been hospitalized for several weeks. The student often leaves class early to visit the hospital and worries about falling behind academically.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Encourage the student to explain how caregiving affects daily responsibilities.", "B": "Discuss available academic and personal support resources within the school.", "C": "Suggest identifying trusted individuals who may provide temporary assistance.", "D": "Explore practical strategies for managing both school and family demands."}, "answer": "D", "scores": {"A": 80, "B": 55, "C": 45, "D": 100}}, {"section": "pre", "category": "family", "num": 20, "scenario": "A student says that financial difficulties at home have made it difficult to pay transportation expenses and purchase required learning materials. The student worries about continuing the semester.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how financial concerns are influencing academic participation and well-being.", "B": "Discuss available financial assistance programs offered through the institution.", "C": "Encourage communicating current concerns with appropriate academic personnel.", "D": "Suggest identifying immediate resources that may reduce financial pressures."}, "answer": "A", "scores": {"A": 100, "B": 55, "C": 80, "D": 45}}, {"section": "post", "category": "academic", "num": 1, "scenario": "A student who has consistently earned high grades suddenly begins failing quizzes and submitting incomplete requirements. During a conversation, the student says, \"I've been trying to study, but I can't seem to keep up anymore.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore possible factors that may be affecting the student's academic performance.", "B": "Encourage discussing current academic concerns with the course instructor first.", "C": "Recommend reviewing study habits before making additional academic decisions.", "D": "Suggest considering available student support services if concerns continue."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 35, "D": 45}}, {"section": "post", "category": "academic", "num": 2, "scenario": "A classmate has been absent several times over the past month. When asked about the absences, the student replies, \"Things have been difficult lately, and coming to school hasn't been easy.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how recent circumstances have affected class attendance and participation", "B": "Encourage informing instructors about the reasons for repeated class absences.", "C": "Discuss possible strategies for improving attendance during the semester.", "D": "Recommend learning about campus resources that provide student assistance."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 35}}, {"section": "post", "category": "academic", "num": 3, "scenario": "A student who is active in several organizations says, \"I'm exhausted all the time. Even when I finish my work, I don't feel accomplished anymore.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how current responsibilities influence emotional and academic functioning.", "B": "Encourage reviewing commitments to identify manageable academic priorities.", "C": "Discuss healthy coping strategies that may reduce ongoing academic stress.", "D": "Recommend considering school services that support student well-being."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 35}}, {"section": "post", "category": "academic", "num": 4, "scenario": "A student admits having trouble concentrating during lectures. Although physically present in class, the student says, \"I read the same page several times, but nothing stays in my mind.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore when concentration difficulties usually occur during academic activities.", "B": "Encourage identifying study routines that improve focus and productivity.", "C": "Discuss current circumstances that may influence classroom concentration levels.", "D": "Recommend becoming familiar with available campus support resources."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 35}}, {"section": "post", "category": "academic", "num": 5, "scenario": "After receiving several failing grades, a student says, \"I'm thinking about leaving school because I don't think I'll ever graduate anyway.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore the reasons influencing the student's thoughts about leaving school.", "B": "Encourage discussing academic options before making a final educational decision.", "C": "Discuss available support services that may assist with current concerns.", "D": "Suggest identifying personal strengths that may support academic persistence."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "emotional", "num": 6, "scenario": "A student shares that they have become increasingly anxious before attending classes. They explain that they often worry about being called on unexpectedly, causing them to lose sleep the night before.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how anxiety has affected the student's academic and daily functioning.", "B": "Encourage identifying situations that seem to increase feelings of anxiety.", "C": "Discuss practical coping strategies that may reduce stress during classes.", "D": "Suggest becoming familiar with available campus support resources."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "emotional", "num": 7, "scenario": "A classmate has recently become less engaged during group discussions and often appears mentally drained. The student says, \"I feel like I'm running on empty, even after taking breaks.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how recent responsibilities have influenced emotional well-being and performance.", "B": "Encourage reviewing daily commitments to identify manageable personal priorities.", "C": "Discuss healthy routines that may support emotional recovery over time.", "D": "Suggest learning about student services that provide additional assistance."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "emotional", "num": 8, "scenario": "A student who once enjoyed participating in school activities now avoids extracurricular events and submits assignments only after repeated reminders. The student says, \"I just don't feel interested in anything anymore.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore possible factors contributing to the student's recent loss of motivation.", "B": "Encourage identifying activities that previously provided enjoyment and purpose.", "C": "Discuss practical steps that may gradually improve academic engagement.", "D": "Suggest considering campus resources that support student well-being."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "emotional", "num": 9, "scenario": "A student's close cousin recently passed away. Since returning to school, the student has become quieter than usual and admits that concentrating during lectures has become difficult.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how the recent loss has affected the student's daily functioning.", "B": "Encourage expressing emotions through trusted family members or supportive friends.", "C": "Discuss healthy coping approaches that may assist during the grieving process.", "D": "Suggest learning about available counseling services offered by the institution."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "emotional", "num": 10, "scenario": "During a conversation, a student casually mentions having intentionally injured themselves after feeling overwhelmed by several personal problems. The student asks you not to tell anyone because they are afraid others will judge them.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore the student's immediate safety while remaining calm and supportive.", "B": "Encourage discussing recent experiences that contributed to overwhelming emotional distress.", "C": "Discuss the importance of involving appropriate professional support when safety is concerned.", "D": "Suggest identifying trusted adults who may assist during the current situation."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "social", "num": 11, "scenario": "A student tells you that someone has been creating anonymous posts mocking their academic performance on social media. Although the posts do not mention their name directly, classmates have started making similar comments during class.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how the online incidents have affected the student's emotional well-being.", "B": "Encourage documenting the online posts and related interactions for future reference.", "C": "Discuss available school resources that may assist with the current situation.", "D": "Suggest identifying trusted individuals who can provide ongoing personal support."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "social", "num": 12, "scenario": "Two classmates who were once close friends have stopped speaking after a misunderstanding during their internship. One student says the tension has become uncomfortable and now affects participation during group activities.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how the unresolved conflict has influenced academic and personal functioning.", "B": "Encourage identifying respectful ways to communicate with the other student.", "C": "Discuss practical approaches for resolving disagreements within professional settings.", "D": "Suggest becoming familiar with campus services that support conflict resolution."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "social", "num": 13, "scenario": "A student shares that frequent misunderstandings with their romantic partner have made it difficult to focus during lectures. The student admits checking their phone repeatedly during class because they worry about ongoing arguments.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how the relationship concerns are affecting daily academic responsibilities.", "B": "Encourage identifying healthy communication strategies within the relationship.", "C": "Discuss personal boundaries that may improve emotional balance over time.", "D": "Suggest considering available student support resources when appropriate."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "social", "num": 14, "scenario": "A transfer student rarely joins classroom discussions and usually spends breaks alone. Although classmates have invited the student to participate in activities, the student politely declines each invitation.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore situations where the student feels most comfortable interacting with others.", "B": "Encourage participating gradually in activities involving small groups of classmates.", "C": "Discuss possible factors contributing to the student's limited social involvement.", "D": "Suggest learning about campus organizations that encourage student participation."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "social", "num": 15, "scenario": "A student who has worked hard on a research project becomes visibly frustrated after receiving repeated revisions from the adviser. The student says, \"No matter what I do, it never seems good enough anymore.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how the repeated feedback has affected the student's motivation and confidence.", "B": "Encourage reflecting on previous accomplishments while planning future improvements.", "C": "Discuss practical ways of managing frustration during demanding academic tasks.", "D": "Suggest considering available guidance resources for additional academic support."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "family", "num": 16, "scenario": "A student confides that they are considering not enrolling next semester because their family can no longer afford the tuition. The student says, \"I've been thinking about stopping school for a while so I can work and help my family instead.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how financial concerns are influencing the student's educational decisions.", "B": "Encourage discussing available financial assistance and scholarship opportunities first.", "C": "Suggest communicating current circumstances with appropriate school personnel promptly.", "D": "Recommend identifying supportive family members when considering future educational plans."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 45, "D": 35}}, {"section": "post", "category": "family", "num": 17, "scenario": "A classmate shares that after their father lost his job, they became the family's primary source of income while continuing their studies. The student says, \"I feel responsible for everyone, but I'm becoming overwhelmed.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how increased family responsibilities influence emotional and academic functioning.", "B": "Encourage identifying practical strategies for balancing current personal obligations.", "C": "Discuss available student services that may provide appropriate support and guidance.", "D": "Suggest communicating present challenges with trusted academic personnel when needed."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "family", "num": 18, "scenario": "A student says they frequently argue with an older sibling because they feel constantly compared with one another. The student admits the conflict has affected concentration and motivation in school.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how family interactions have influenced the student's emotional well-being.", "B": "Encourage identifying respectful ways of expressing personal thoughts and feelings.", "C": "Discuss healthy approaches for managing conflict within family relationships.", "D": "Suggest considering available school support resources if concerns continue."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "family", "num": 19, "scenario": "A student working as a service crew member has recently begun missing important group meetings because of changing work schedules. The student worries about disappointing both co-workers and classmates.", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how current responsibilities affect academic performance and personal well-being.", "B": "Encourage reviewing daily schedules to identify manageable responsibilities and priorities.", "C": "Discuss available campus services that may support students facing similar concerns.", "D": "Suggest communicating scheduling difficulties with instructors and group members."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}, {"section": "post", "category": "family", "num": 20, "scenario": "A student shares that every academic decision is made by their parents, including the course they should take. The student says, \"I'm afraid to tell them that this isn't the career I really want.\"", "question": "What would be the MOST appropriate initial response?", "options": {"A": "Explore how parental expectations influence the student's personal and academic decisions.", "B": "Encourage identifying respectful ways of communicating thoughts with family members.", "C": "Discuss possible sources of support when making important educational decisions.", "D": "Suggest considering school guidance services for additional assistance and direction."}, "answer": "A", "scores": {"A": 100, "B": 80, "C": 55, "D": 45}}]
+;
+
+/* =========================================================
+   Student Psychology & Academic Performance Survey
+   Pre-test / Post-test simulation, single-file prototype.
+   Uses localStorage as a stand-in database (no backend).
+   Admin login (prototype only): admin / admin
+
+   Scoring model: every answer option (A-D) on every item has
+   a 0-100 appropriateness score baked into QUESTION_BANK.
+   A phase's result is the average of the 20 selected scores
+   (5 items x 4 categories). All 4 categories must be completed
+   for a phase before moving on; categories can be done in any
+   order and are checked off as they're finished.
+   ========================================================= */
+
+const CATEGORIES = [
+  { key:'academic', code:'CAT-1', title:'Academic Distress', subtitle:'Scenarios involving coursework pressure, grades, and academic overwhelm.' },
+  { key:'emotional', code:'CAT-2', title:'Emotional and Mental Health Concerns', subtitle:'Scenarios involving mood, anxiety, and emotional well-being.' },
+  { key:'social', code:'CAT-3', title:'Social and Interpersonal Issues', subtitle:'Scenarios involving peer relationships, conflict, and belonging.' },
+  { key:'family', code:'CAT-4', title:'Family and Personal Concerns', subtitle:'Scenarios involving home responsibilities and personal circumstances.' },
+];
+
+function questionsFor(section, catKey){
+  return QUESTION_BANK
+    .filter(q => q.section === section && q.category === catKey)
+    .sort((a,b) => a.num - b.num);
+}
+
+function allQuestionsFor(section){
+  return QUESTION_BANK.filter(q => q.section === section).sort((a,b)=>{
+    const ci = CATEGORIES.findIndex(c=>c.key===a.category) - CATEGORIES.findIndex(c=>c.key===b.category);
+    return ci !== 0 ? ci : a.num - b.num;
+  });
+}
+
+const DB = {
+  async all(){ return await window.__fb.getResponses(); },
+  async archived(){ return await window.__fb.getArchived(); },
+  async add(entry){
+    const id = await window.__fb.addResponse(entry);
+    entry.id = id;
+    return entry;
+  },
+  async archive(ids){ await window.__fb.archiveResponses(ids); },
+  async restore(ids){ await window.__fb.restoreResponses(ids); }
+};
+
+const DRAFT_KEY = 'sim_draft_v2';
+function saveDraft(){ localStorage.setItem(DRAFT_KEY, JSON.stringify(state.data)); }
+function loadDraft(){ const d = localStorage.getItem(DRAFT_KEY); return d ? JSON.parse(d) : null; }
+function clearDraft(){ localStorage.removeItem(DRAFT_KEY); }
+
+function blankData(){
+  return { demo:{}, preAnswers:{}, postAnswers:{}, recorded:false, recording:false };
+}
+
+const state = {
+  route: location.hash.replace('#','') || 'landing',
+  data: loadDraft() || blankData(),
+  adminAuthed: sessionStorage.getItem('admin_authed') === '1',
+};
+
+window.addEventListener('hashchange', ()=>{ state.route = location.hash.replace('#','') || 'landing'; render(); });
+
+function go(route){ location.hash = route; }
+
+function esc(s){ return (s||'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function questionKey(section, q){ return `${section}_${q.category}_q${q.num}`; }
+
+function categoryStatus(section, catKey){
+  const qs = questionsFor(section, catKey);
+  const answers = section === 'pre' ? state.data.preAnswers : state.data.postAnswers;
+  const answered = qs.filter(q => answers[questionKey(section,q)]).length;
+  return { answered, total: qs.length, complete: answered === qs.length };
+}
+
+function phaseComplete(section){
+  return CATEGORIES.every(c => categoryStatus(section, c.key).complete);
+}
+
+// ---------- Renderers ----------
+function render(){
+  const app = document.getElementById('app');
+  const r = state.route;
+  const isAdminRoute = r === 'portal-9x7k2m-dash';
+  app.classList.toggle('app-wide', isAdminRoute);
+
+  if (r === 'landing') return go('consent');
+  if (r === 'consent') return renderConsent(app);
+  if (r === 'demo') return renderDemographics(app);
+  if (r === 'pre-hub') return renderHub(app, 'pre');
+  if (r === 'post-hub') return renderHub(app, 'post');
+  if (r.startsWith('pre-')) return renderQuestionnaire(app, 'pre', r.slice(4));
+  if (r.startsWith('post-')) return renderQuestionnaire(app, 'post', r.slice(5));
+  if (r === 'results') return renderResults(app);
+  if (r === 'portal-9x7k2m') return renderAdminLogin(app);
+  if (r === 'portal-9x7k2m-dash') return renderAdminDash(app);
+  return go('consent');
+}
+
+function renderConsent(app){
+  app.innerHTML = `
+    <div class="eyebrow">Informed Consent</div>
+    <h1>Informed consent</h1>
+    <p class="lede">Please read before continuing.</p>
+    <div class="card">
+      <div class="consent-box">
+        <p><strong>Purpose.</strong> [ - - - - - - - - - - - - - - - - -]</p>
+        <p><strong>Participation.</strong> Your participation is completely voluntary. You may stop at any time without penalty.</p>
+        <p><strong>Confidentiality.</strong> Responses are anonymous. Name is optional. No identifying metadata is collected or stored.</p>
+        <p><strong>Risks.</strong> [Placeholder — note any anticipated risks/discomforts, if applicable.]</p>
+        <p><strong>Contact.</strong> [Placeholder — researcher name / contact email.]</p>
+      </div>
+      <div class="check-row">
+        <input type="checkbox" id="agree">
+        <label for="agree">I have read the information above and I voluntarily agree to participate.</label>
+      </div>
+      <div id="consentErr"></div>
+      <div class="btn-row end">
+        <button class="btn" id="consentNext">Continue →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('consentNext').onclick = ()=>{
+    if (!document.getElementById('agree').checked){
+      document.getElementById('consentErr').innerHTML = `<div class="error-msg">Please check the box to continue.</div>`;
+      return;
+    }
+    go('demo');
+  };
+}
+
+function renderDemographics(app){
+  const d = state.data.demo;
+  app.innerHTML = `
+    <div class="eyebrow">Demographic Profile</div>
+    <h1>Background information</h1>
+    <p class="lede">Name is optional. Everything else is required.</p>
+    <div class="card">
+      <div class="field">
+        <label>Name <span class="opt">(optional)</span></label>
+        <input type="text" id="f_name" value="${esc(d.name||'')}">
+      </div>
+      <div class="grid-2">
+        <div class="field">
+          <label>Age</label>
+          <input type="number" id="f_age" min="10" max="100" value="${esc(d.age||'')}">
+        </div>
+        <div class="field">
+          <label>Sex</label>
+          <select id="f_sex">
+            <option value="">Select…</option>
+            ${['Male','Female','Prefer not to say'].map(o=>`<option ${d.sex===o?'selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label>Section</label>
+        <select id="f_section">
+          <option value="">Select…</option>
+          ${Array.from({length:10}, (_,i)=>String(41001+i)).map(o=>`<option ${d.section===o?'selected':''}>${o}</option>`).join('')}
+        </select>
+      </div>
+      <div id="demoErr"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="go('consent')">← Back</button>
+        <button class="btn" id="demoNext">Continue →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('demoNext').onclick = ()=>{
+    const vals = {
+      name: document.getElementById('f_name').value.trim(),
+      age: document.getElementById('f_age').value.trim(),
+      sex: document.getElementById('f_sex').value,
+      section: document.getElementById('f_section').value.trim(),
+    };
+    if (!vals.age || !vals.sex || !vals.section){
+      document.getElementById('demoErr').innerHTML = `<div class="error-msg">Please complete all required fields.</div>`;
+      return;
+    }
+    state.data.demo = vals;
+    saveDraft();
+    go('pre-hub');
+  };
+}
+
+function renderHub(app, section){
+  if (section === 'post' && !phaseComplete('pre')) return go('pre-hub');
+  if (!state.data.demo || !state.data.demo.age) return go('demo');
+
+  const label = section === 'pre' ? 'Pre-test' : 'Post-test';
+  const allDone = phaseComplete(section);
+  const doneCount = CATEGORIES.filter(c=>categoryStatus(section,c.key).complete).length;
+  const backRoute = section === 'pre' ? 'demo' : 'pre-hub';
+  const nextRoute = section === 'pre' ? 'post-hub' : 'results';
+  const nextLabel = section === 'pre' ? 'Continue to post-test →' : 'View results →';
+
+  app.innerHTML = `
+    <div class="eyebrow">${label} — Category Checklist</div>
+    <h1>${label}: complete all four categories</h1>
+    <p class="lede">Pick a category to begin or continue. You can complete them in any order — each is checked off once its 5 items are answered. All four must be complete before you can move on.</p>
+    <div class="card">
+      ${CATEGORIES.map(c=>{
+        const st = categoryStatus(section, c.key);
+        return `
+        <div class="cat-pick-row" onclick="go('${section}-${c.key}')">
+          <span class="cat-status-icon ${st.complete?'complete':'pending'}">${st.complete ? '✓' : '○'}</span>
+          <span class="cat-pick-body">
+            <span class="cat-code">${c.code}</span>
+            <span class="cat-title">${c.title}</span>
+            <span class="cat-sub">${c.subtitle}</span>
+          </span>
+          <span class="pill">${st.answered}/${st.total}</span>
+        </div>
+      `;}).join('')}
+      <div class="btn-row">
+        <button class="btn secondary" onclick="go('${backRoute}')">← Back</button>
+        <button class="btn ${allDone?'':'btn-disabled'}" id="hubNext" ${allDone?'':'disabled'}>${nextLabel}</button>
+      </div>
+      ${allDone ? '' : `<p class="hub-progress">${doneCount} of ${CATEGORIES.length} categories complete</p>`}
+    </div>
+  `;
+  const nextBtn = document.getElementById('hubNext');
+  if (allDone){
+    nextBtn.onclick = ()=> go(nextRoute);
+  }
+}
+
+function renderQuestionnaire(app, section, catKey){
+  const cat = CATEGORIES.find(c=>c.key===catKey);
+  if (!cat) return go(`${section}-hub`);
+  if (section === 'post' && !phaseComplete('pre')) return go('pre-hub');
+
+  const questions = questionsFor(section, cat.key);
+  const answers = section === 'pre' ? state.data.preAnswers : state.data.postAnswers;
+  const label = section === 'pre' ? 'Pre-test' : 'Post-test';
+  const hubRoute = `${section}-hub`;
+
+  app.innerHTML = `
+    <div class="eyebrow">${label} — ${esc(cat.title)}</div>
+    <h1>${label}: ${esc(cat.title)}</h1>
+    <p class="lede">Read each scenario and choose the response you believe is most appropriate. All ${questions.length} items must be answered.</p>
+    <div class="card">
+      ${questions.map((q,i)=>{
+        const qk = questionKey(section, q);
+        const selected = answers[qk];
+        return `
+        <div class="q-block">
+          <span class="q-code">${cat.code} · Q${i+1}</span>
+          <div class="q-scenario">${esc(q.scenario)}</div>
+          <div class="q-prompt">${esc(q.question)}</div>
+          ${['A','B','C','D'].map(letter=>{
+            const text = q.options[letter];
+            if (!text) return '';
+            return `
+            <label class="opt-row ${selected===letter?'checked':''}" data-qk="${qk}" data-letter="${letter}">
+              <input type="radio" name="${qk}" value="${letter}" ${selected===letter?'checked':''}>
+              <span><span class="opt-letter">${letter}.</span> ${esc(text)}</span>
+            </label>`;
+          }).join('')}
+        </div>
+      `;}).join('')}
+      <div id="qErr"></div>
+      <div class="btn-row">
+        <button class="btn secondary" onclick="go('${hubRoute}')">← Back to checklist</button>
+        <button class="btn" id="qNext">Save &amp; return →</button>
+      </div>
+    </div>
+  `;
+
+  document.querySelectorAll('.opt-row').forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const qk = row.dataset.qk;
+      const letter = row.dataset.letter;
+      answers[qk] = letter;
+      saveDraft();
+      document.querySelectorAll(`.opt-row[data-qk="${qk}"]`).forEach(r=>{
+        r.classList.toggle('checked', r.dataset.letter === letter);
+      });
+    });
+  });
+
+  document.getElementById('qNext').onclick = ()=>{
+    const unanswered = questions.filter(q=>!answers[questionKey(section,q)]);
+    if (unanswered.length){
+      document.getElementById('qErr').innerHTML = `<div class="error-msg">Please answer all ${questions.length} items (${unanswered.length} remaining).</div>`;
+      return;
+    }
+    go(hubRoute);
+  };
+}
+
+function scoreCategory(section, catKey){
+  const questions = questionsFor(section, catKey);
+  const answers = section === 'pre' ? state.data.preAnswers : state.data.postAnswers;
+  let correct = 0;
+  questions.forEach(q=>{
+    const letter = answers[questionKey(section,q)];
+    if (letter && letter === q.answer) correct++;
+  });
+  return { correct, count: questions.length, pct: Math.round((correct/questions.length)*100) };
+}
+
+function scorePhase(section){
+  let correct = 0, count = 0;
+  const byCategory = {};
+  CATEGORIES.forEach(c=>{
+    const s = scoreCategory(section, c.key);
+    byCategory[c.key] = s;
+    correct += s.correct;
+    count += s.count;
+  });
+  return { correct, count, pct: Math.round((correct/count)*100), byCategory };
+}
+
+function renderResults(app){
+  if (!phaseComplete('pre') || !phaseComplete('post')) return go('pre-hub');
+  const pre = scorePhase('pre');
+  const post = scorePhase('post');
+
+  app.innerHTML = `
+    <div class="stamp">✓ RESPONSE RECORDED</div>
+    <h1>Thank you for participating</h1>
+    <p class="lede">Each item has one correct answer. Your score is the number of items answered correctly out of 20 in each phase.</p>
+    <div class="card">
+      <div class="score-panel">
+        <div class="score-card">
+          <div class="label">Pre-test score</div>
+          <div class="value">${pre.correct}/${pre.count}</div>
+          <div class="sub">${pre.pct}% correct</div>
+        </div>
+        <div class="score-card">
+          <div class="label">Post-test score</div>
+          <div class="value">${post.correct}/${post.count}</div>
+          <div class="sub">${post.pct}% correct</div>
+        </div>
+      </div>
+      <hr class="hr">
+      <p class="lede" style="max-width:none;">Your response has been saved. You may close this window.</p>
+      <div class="btn-row end">
+        <button class="btn secondary" onclick="restart()">Start a new response</button>
+      </div>
+    </div>
+  `;
+
+  if (!state.data.recorded && !state.data.recording){
+    state.data.recording = true;
+    const entry = {
+      demo: state.data.demo,
+      preAnswers: state.data.preAnswers,
+      postAnswers: state.data.postAnswers,
+      preScore: pre.correct,
+      preTotal: pre.count,
+      prePct: pre.pct,
+      postScore: post.correct,
+      postTotal: post.count,
+      postPct: post.pct,
+      preByCategory: Object.fromEntries(CATEGORIES.map(c=>[c.key, pre.byCategory[c.key].correct])),
+      postByCategory: Object.fromEntries(CATEGORIES.map(c=>[c.key, post.byCategory[c.key].correct])),
+    };
+    DB.add(entry).then(()=>{
+      state.data.recorded = true;
+      state.data.recording = false;
+      saveDraft();
+    }).catch(err=>{
+      state.data.recording = false;
+      console.error('Failed to save response to Firestore:', err);
+    });
+  }
+}
+
+function restart(){
+  state.data = blankData();
+  clearDraft();
+  go('consent');
+}
+
+// ---------- Admin portal (hidden route, no public link) ----------
+function renderAdminLogin(app){
+  app.innerHTML = `
+    <div class="eyebrow">Admin Access</div>
+    <h1>Sign in</h1>
+    <div class="card card-narrow">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="u">
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="text" id="p">
+      </div>
+      <div id="loginErr"></div>
+      <div class="btn-row end">
+        <button class="btn" id="loginBtn">Sign in →</button>
+      </div>
+    </div>
+  `;
+  document.getElementById('loginBtn').onclick = ()=>{
+    const u = document.getElementById('u').value.trim();
+    const p = document.getElementById('p').value.trim();
+    if (u==='admin' && p==='admin'){
+      sessionStorage.setItem('admin_authed','1');
+      state.adminAuthed = true;
+      go('portal-9x7k2m-dash');
+    } else {
+      document.getElementById('loginErr').innerHTML = `<div class="error-msg">Invalid credentials.</div>`;
+    }
+  };
+}
+
+const PRE_Q_ORDER = allQuestionsFor('pre');
+const POST_Q_ORDER = allQuestionsFor('post');
+
+function toCSV(rows){
+  if (!rows.length) return '';
+  const headers = ['name','age','sex','section',
+    ...PRE_Q_ORDER.map((q,i)=>`pre_q${i+1}`),
+    ...POST_Q_ORDER.map((q,i)=>`post_q${i+1}`),
+    'pre_score','pre_total','post_score','post_total'];
+  const lines = [headers.join(',')];
+  rows.forEach(r=>{
+    const row = [
+      r.demo.name||'', r.demo.age||'', r.demo.sex||'', r.demo.section||'',
+      ...PRE_Q_ORDER.map(q => (r.preAnswers && r.preAnswers[questionKey('pre',q)]) || ''),
+      ...POST_Q_ORDER.map(q => (r.postAnswers && r.postAnswers[questionKey('post',q)]) || ''),
+      r.preScore, r.preTotal, r.postScore, r.postTotal,
+    ];
+    lines.push(row.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(','));
+  });
+  return lines.join('\n');
+}
+
+function renderAdminDash(app){
+  if (!state.adminAuthed && sessionStorage.getItem('admin_authed')!=='1'){
+    return go('portal-9x7k2m');
+  }
+  if (!state.adminView) state.adminView = 'active';
+  app.innerHTML = `<div class="eyebrow">Admin Portal</div><h1 style="font-size:26px;">Loading responses…</h1>`;
+  const fetcher = state.adminView === 'archived' ? DB.archived() : DB.all();
+  fetcher.then(rows=>{
+    if (state.route !== 'portal-9x7k2m-dash') return; // user navigated away while loading
+    renderAdminDashWithRows(app, rows);
+  }).catch(err=>{
+    app.innerHTML = `<div class="eyebrow">Admin Portal</div><h1 style="font-size:26px;">Couldn't load responses</h1><p class="lede">${esc(err.message||String(err))}</p>`;
+  });
+}
+
+function renderAdminDashWithRows(app, rows){
+  const isArchived = state.adminView === 'archived';
+  const actionLabel = isArchived ? 'Restore selected' : 'Archive selected';
+  const actionClass = isArchived ? 'btn' : 'btn danger';
+
+  app.innerHTML = `
+    <div class="top-bar">
+      <div>
+        <div class="eyebrow">Admin Portal</div>
+        <h1 style="font-size:26px;">${isArchived ? 'Archived responses' : 'Survey results'}</h1>
+      </div>
+      <span class="pill">${rows.length} response${rows.length===1?'':'s'}</span>
+    </div>
+    <div class="card">
+      <div class="btn-row" style="margin-top:0; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; gap:10px;">
+          <button class="btn ${isArchived ? '' : 'secondary'}" id="tabActive">Active</button>
+          <button class="btn ${isArchived ? '' : 'secondary'}" id="tabArchived">Archived</button>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn secondary" id="csvBtn">Download CSV</button>
+          <button class="btn secondary" id="logoutBtn">Log out</button>
+        </div>
+        <button class="${actionClass}" id="actionBtn" disabled>${actionLabel} (0)</button>
+      </div>
+      <p class="lede" style="max-width:none; margin-top:0;">${isArchived
+        ? 'These responses were archived by an admin. Restoring moves them back into the main results list.'
+        : "Archiving moves a response to a separate backup collection — it's never permanently deleted from here."}</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr>
+            <th style="width:28px;"><input type="checkbox" id="selectAll"></th>
+            <th>ID</th><th>Age</th><th>Sex</th><th>Section</th><th>Pre score</th><th>Post score</th><th>Δ</th>${isArchived ? '<th>Archived at</th>' : ''}
+          </tr></thead>
+          <tbody>
+            ${rows.map(r=>{
+              const delta = r.postScore - r.preScore;
+              return `
+              <tr>
+                <td><input type="checkbox" class="row-check" data-id="${r.id}"></td>
+                <td>${r.id}</td>
+                <td>${esc(r.demo.age)}</td>
+                <td>${esc(r.demo.sex)}</td>
+                <td>${esc(r.demo.section)}</td>
+                <td>${r.preScore}/${r.preTotal} (${r.prePct}%)</td>
+                <td>${r.postScore}/${r.postTotal} (${r.postPct}%)</td>
+                <td>${delta>0?'+':''}${delta}</td>
+                ${isArchived ? `<td>${esc((r.archivedAt||'').replace('T',' ').slice(0,19))}</td>` : ''}
+              </tr>
+            `;}).join('') || `<tr><td colspan="${isArchived ? 9 : 8}" style="color:var(--ink-soft);">${isArchived ? 'No archived responses.' : 'No responses yet.'}</td></tr>`}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+
+  const actionBtn = document.getElementById('actionBtn');
+  const selectAll = document.getElementById('selectAll');
+  const rowChecks = ()=> Array.from(document.querySelectorAll('.row-check'));
+
+  function updateActionBtn(){
+    const n = rowChecks().filter(c=>c.checked).length;
+    actionBtn.textContent = `${actionLabel} (${n})`;
+    actionBtn.disabled = n === 0;
+  }
+
+  rowChecks().forEach(cb=>{ cb.onchange = updateActionBtn; });
+  if (selectAll){
+    selectAll.onchange = ()=>{
+      rowChecks().forEach(cb=>{ cb.checked = selectAll.checked; });
+      updateActionBtn();
+    };
+  }
+
+  document.getElementById('tabActive').onclick = ()=>{
+    if (state.adminView === 'active') return;
+    state.adminView = 'active';
+    render();
+  };
+  document.getElementById('tabArchived').onclick = ()=>{
+    if (state.adminView === 'archived') return;
+    state.adminView = 'archived';
+    render();
+  };
+
+  document.getElementById('csvBtn').onclick = ()=>{
+    const csv = toCSV(rows);
+    const blob = new Blob([csv], {type:'text/csv'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = isArchived ? 'survey_responses_archived.csv' : 'survey_responses.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  document.getElementById('logoutBtn').onclick = ()=>{
+    sessionStorage.removeItem('admin_authed');
+    state.adminAuthed = false;
+    state.adminView = 'active';
+    go('portal-9x7k2m');
+  };
+  actionBtn.onclick = ()=>{
+    const ids = rowChecks().filter(c=>c.checked).map(c=>c.dataset.id);
+    if (!ids.length) return;
+    const label = ids.length === 1 ? 'this response' : `these ${ids.length} responses`;
+    const confirmMsg = isArchived
+      ? `Restore ${label} back into the main results list?`
+      : `Move ${label} to the backup collection? They'll be removed from the main results list but not permanently deleted.`;
+    if (!confirm(confirmMsg)) return;
+    actionBtn.disabled = true;
+    actionBtn.textContent = isArchived ? 'Restoring…' : 'Archiving…';
+    const op = isArchived ? DB.restore(ids) : DB.archive(ids);
+    op.then(render).catch(err=>{
+      alert(`Failed to ${isArchived ? 'restore' : 'archive'}: ` + (err.message||err));
+      updateActionBtn();
+    });
+  };
+}
+
+render();
+</script>
+</body>
+</html>
