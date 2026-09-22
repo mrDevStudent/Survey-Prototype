@@ -24,7 +24,7 @@ window.APP_CONFIG = {
   geminiModel: 'gemini-2.5-flash',
 
   firebase: {
-    apiKey: "AIzaSyAE6qiggxn3lnUFYPOCY2sSl4mbyHswvRA",
+    apiKey: "AQ.Ab8RN6KZiMA6eKdAvOGv7m_9wLu05SD8qeuDShnWhyyluhGJoA",
     authDomain: "student-survey-db.firebaseapp.com",
     projectId: "student-survey-db",
     storageBucket: "student-survey-db.firebasestorage.app",
