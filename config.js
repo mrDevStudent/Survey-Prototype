@@ -20,7 +20,7 @@
 
 window.APP_CONFIG = {
   // Get one free at https://aistudio.google.com → left nav → "Get API key"
-  geminiApiKey: 'AQ.Ab8RN6KHMWL8X0IM3nC5jwlcFy4gRdvI7VnsQlF6bH58LwWUeQ',
+  geminiApiKey: 'AQ.Ab8RN6KZiMA6eKdAvOGv7m_9wLu05SD8qeuDShnWhyyluhGJoA',
   geminiModel: 'gemini-2.5-flash',
 
   firebase: {
