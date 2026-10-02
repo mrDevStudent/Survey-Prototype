@@ -597,6 +597,7 @@
       }
     }
   };
+  window.dispatchEvent(new Event('fb-ready'));
 </script>
 
 <script>
@@ -732,16 +733,26 @@ function allQuestionsFor(section){
   });
 }
 
+// The Firebase module script runs after this classic script, so wait for it.
+function waitFb(){
+  if (window.__fb) return Promise.resolve();
+  return new Promise((resolve, reject)=>{
+    const t = setTimeout(()=>reject(new Error('Firebase failed to load. Check your connection and reload.')), 15000);
+    window.addEventListener('fb-ready', ()=>{ clearTimeout(t); resolve(); }, {once:true});
+  });
+}
+
 const DB = {
-  async all(){ return await window.__fb.getResponses(); },
-  async archived(){ return await window.__fb.getArchived(); },
+  async all(){ await waitFb(); return await window.__fb.getResponses(); },
+  async archived(){ await waitFb(); return await window.__fb.getArchived(); },
   async add(entry){
+    await waitFb();
     const id = await window.__fb.addResponse(entry);
     entry.id = id;
     return entry;
   },
-  async archive(ids){ await window.__fb.archiveResponses(ids); },
-  async restore(ids){ await window.__fb.restoreResponses(ids); }
+  async archive(ids){ await waitFb(); await window.__fb.archiveResponses(ids); },
+  async restore(ids){ await waitFb(); await window.__fb.restoreResponses(ids); }
 };
 
 const DRAFT_KEY = 'sim_draft_v2';
