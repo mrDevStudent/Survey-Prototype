@@ -546,35 +546,17 @@
   import {
     getFirestore, collection, addDoc, getDocs, deleteDoc, doc, getDoc, setDoc
   } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
-  import {
-    getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
-  } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
 
   const firebaseConfig = window.APP_CONFIG.firebase;
 
   const fbApp = initializeApp(firebaseConfig);
   const db = getFirestore(fbApp);
-  const auth = getAuth(fbApp);
-  // Resolves once with the restored user (or null) so the dashboard
-  // doesn't query Firestore before Firebase knows who is signed in.
-  const authReady = new Promise(resolve => {
-    const unsub = onAuthStateChanged(auth, user => { unsub(); resolve(user); });
-  });
   const RESPONSES_COL = 'responses';
   const BACKUP_COL = 'responses_backup';
 
   // Exposed on window so the classic <script> below (which uses plain
   // top-level functions + inline onclick=) can call into Firestore.
   window.__fb = {
-    // ---- Admin auth (Firebase Authentication, email + password) ----
-    authReady: () => authReady,
-    currentUser: () => auth.currentUser,
-    async login(email, password){
-      const cred = await signInWithEmailAndPassword(auth, email, password);
-      return cred.user;
-    },
-    async logout(){ await signOut(auth); },
-
     async addResponse(entry){
       const ref = await addDoc(collection(db, RESPONSES_COL), entry);
       return ref.id;
@@ -615,7 +597,6 @@
       }
     }
   };
-  window.dispatchEvent(new Event('fb-ready'));
 </script>
 
 <script>
@@ -625,9 +606,8 @@ const QUESTION_BANK = [{"section": "pre", "category": "academic", "num": 1, "sce
 /* =========================================================
    Student Psychology & Academic Performance Survey
    Pre-test / Post-test simulation, single-file prototype.
-   Responses are stored in Firestore.
-   Admin login uses Firebase Authentication (email + password);
-   create the admin user in Firebase console → Authentication → Users.
+   Uses localStorage as a stand-in database (no backend).
+   Admin login (prototype only): admin / admin
 
    Scoring model: every answer option (A-D) on every item has
    a 0-100 appropriateness score baked into QUESTION_BANK.
@@ -752,12 +732,6 @@ function allQuestionsFor(section){
   });
 }
 
-// The Firebase module script loads after this classic script, so wait for it.
-function waitFb(){
-  return window.__fb ? Promise.resolve()
-    : new Promise(r => window.addEventListener('fb-ready', r, {once:true}));
-}
-
 const DB = {
   async all(){ return await window.__fb.getResponses(); },
   async archived(){ return await window.__fb.getArchived(); },
@@ -782,7 +756,7 @@ function blankData(){
 const state = {
   route: location.hash.replace('#','') || 'landing',
   data: loadDraft() || blankData(),
-  adminAuthed: false,
+  adminAuthed: sessionStorage.getItem('admin_authed') === '1',
 };
 state.data.explanations = {}; // AI text is session-only; never restored from an old draft
 delete state.data.postExplanations;
@@ -1209,8 +1183,8 @@ function renderAdminLogin(app){
     <h1>Sign in</h1>
     <div class="card card-narrow">
       <div class="field">
-        <label>Email</label>
-        <input type="email" id="u" autocomplete="username">
+        <label>Username</label>
+        <input type="text" id="u">
       </div>
       <div class="field">
         <label>Password</label>
@@ -1222,32 +1196,15 @@ function renderAdminLogin(app){
       </div>
     </div>
   `;
-  const doLogin = async ()=>{
-    const email = document.getElementById('u').value.trim();
-    const pass = document.getElementById('p').value;
-    const btn = document.getElementById('loginBtn');
-    const errBox = document.getElementById('loginErr');
-    if (!email || !pass){
-      errBox.innerHTML = `<div class="error-msg">Enter your email and password.</div>`;
-      return;
-    }
-    btn.disabled = true;
-    errBox.innerHTML = '';
-    try {
-      await waitFb();
-      await window.__fb.login(email, pass);
+  const doLogin = ()=>{
+    const u = document.getElementById('u').value.trim();
+    const p = document.getElementById('p').value.trim();
+    if (u==='admin' && p==='admin'){
+      sessionStorage.setItem('admin_authed','1');
       state.adminAuthed = true;
       go('portal-9x7k2m-dash');
-    } catch (err){
-      const code = (err && err.code) || '';
-      const msg = /invalid-credential|wrong-password|user-not-found|invalid-email/.test(code) ? 'Invalid email or password.'
-        : code === 'auth/too-many-requests' ? 'Too many attempts. Try again later.'
-        : code === 'auth/operation-not-allowed' ? 'Email/Password sign-in is not enabled in Firebase.'
-        : code === 'auth/network-request-failed' ? 'Network error. Check your connection.'
-        : 'Sign-in failed. ' + (err && err.message || '');
-      errBox.innerHTML = `<div class="error-msg">${esc(msg)}</div>`;
-    } finally {
-      btn.disabled = false;
+    } else {
+      document.getElementById('loginErr').innerHTML = `<div class="error-msg">Invalid credentials.</div>`;
     }
   };
   document.getElementById('loginBtn').onclick = doLogin;
@@ -1277,29 +1234,17 @@ function toCSV(rows){
 }
 
 function renderAdminDash(app){
+  if (!state.adminAuthed && sessionStorage.getItem('admin_authed')!=='1'){
+    return go('portal-9x7k2m');
+  }
   if (!state.adminView) state.adminView = 'active';
   app.innerHTML = `<div class="eyebrow">Admin Portal</div><h1 style="font-size:26px;">Loading responses…</h1>`;
-  const view = state.adminView;
-  // Require a real Firebase sign-in; Firestore rules enforce it server-side too.
-  const fetcher = waitFb()
-    .then(()=> window.__fb.authReady())
-    .then(user=>{
-      if (!user){
-        state.adminAuthed = false;
-        throw Object.assign(new Error('Not signed in'), {code:'app/not-signed-in'});
-      }
-      state.adminAuthed = true;
-      return view === 'archived' ? DB.archived() : DB.all();
-    });
+  const fetcher = state.adminView === 'archived' ? DB.archived() : DB.all();
   fetcher.then(rows=>{
     if (state.route !== 'portal-9x7k2m-dash') return; // user navigated away while loading
     renderAdminDashWithRows(app, rows);
   }).catch(err=>{
-    if (err && err.code === 'app/not-signed-in'){
-      if (state.route === 'portal-9x7k2m-dash') go('portal-9x7k2m');
-      return;
-    }
-    app.innerHTML = `<div class="eyebrow">Admin Portal</div><h1 style="font-size:26px;">Couldn't load responses</h1><p class="lede">${esc(err.message||String(err))}</p>`;
+    app.innerHTML = `<div class="eyebrow">Admin Portal</div><h1 style="font-size:26px;">Couldn't load responses</h1><p class="lede">${esc(err.message||String(err))}</p>${/permission/i.test(String(err&&err.message))?'<p class="lede">Firestore rules are blocking access. Publish the rules listed in config.js.</p>':''}`;
   });
 }
 
@@ -1397,8 +1342,8 @@ function renderAdminDashWithRows(app, rows){
     a.click();
     URL.revokeObjectURL(url);
   };
-  document.getElementById('logoutBtn').onclick = async ()=>{
-    try { await window.__fb.logout(); } catch(e){ console.error('Sign-out failed:', e); }
+  document.getElementById('logoutBtn').onclick = ()=>{
+    sessionStorage.removeItem('admin_authed');
     state.adminAuthed = false;
     state.adminView = 'active';
     go('portal-9x7k2m');

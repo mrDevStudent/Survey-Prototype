@@ -17,30 +17,18 @@
 //     apiKey being hidden (Firebase web API keys are meant to be public
 //     anyway — the security boundary is the Firestore rules, not this key).
 //
-// Admin dashboard (Firebase Authentication):
-//   1. Firebase console → Authentication → Sign-in method → enable Email/Password.
-//   2. Authentication → Users → add the admin account.
-//   3. Firestore → Rules → publish:
+// Admin dashboard (prototype): the admin / admin login is checked in the
+// browser only, so Firestore must allow open access. Firebase console →
+// Firestore → Rules → publish:
 //        rules_version = '2';
 //        service cloud.firestore {
 //          match /databases/{db}/documents {
-//            function isAdmin() {
-//              return request.auth != null
-//                && request.auth.token.email == 'YOUR_ADMIN_EMAIL';
-//            }
-//            match /responses/{id} {
-//              allow create: if true;
-//              allow read, update, delete: if isAdmin();
-//            }
-//            match /responses_backup/{id} {
-//              allow read, write: if isAdmin();
-//            }
+//            match /responses/{id}        { allow read, write: if true; }
+//            match /responses_backup/{id} { allow read, write: if true; }
 //          }
 //        }
-//   4. Authentication → Settings → Authorized domains: add your GitHub Pages domain.
-//   The isAdmin() email check matters: Firebase web API keys are public, so
-//   anyone could otherwise create their own account and pass a bare
-//   `request.auth != null` check.
+//   WARNING: with these rules anyone who has the project config can read or
+//   delete all responses. Fine for a prototype; lock down before real use.
 // ---------------------------------------------------------------------------
 
 window.APP_CONFIG = {
